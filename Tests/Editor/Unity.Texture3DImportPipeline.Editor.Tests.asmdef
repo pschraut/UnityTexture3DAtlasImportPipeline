@@ -1,0 +1,17 @@
+{
+    "name": "Unity.Texture3DImportPipeline.Editor.Tests",
+    "references": [
+        "GUID:204d2d7a58ee00946b8c66f2e4e550c0"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
