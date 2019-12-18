@@ -16,7 +16,7 @@ namespace Oddworm.EditorFramework
     [CanEditMultipleObjects]
     [HelpURL("https://docs.unity3d.com/ScriptReference/Texture3D.html")]
     [ScriptedImporter(1, Texture3DImporter.kFileExtension)]
-    public partial class Texture3DImporter : ScriptedImporter
+    public class Texture3DImporter : ScriptedImporter
     {
         [Tooltip("Selects how the Texture behaves when tiled.")]
         [SerializeField]
