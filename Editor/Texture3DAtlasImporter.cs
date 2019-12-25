@@ -1,6 +1,6 @@
 ﻿//
 // Texture3D Importer for Unity. Copyright (c) 2019 Peter Schraut (www.console-dev.de). See LICENSE.md
-// https://github.com/pschraut/UnityTexture3DImportPipeline
+// https://github.com/pschraut/UnityTexture3DAtlasImportPipeline
 //
 #pragma warning disable IDE1006, IDE0017
 using UnityEngine;
@@ -25,8 +25,8 @@ namespace Oddworm.EditorFramework
 {
     [CanEditMultipleObjects]
     [HelpURL("https://docs.unity3d.com/ScriptReference/Texture3D.html")]
-    [ScriptedImporter(1, Texture3DImporter.kFileExtension)]
-    public class Texture3DImporter : ScriptedImporter
+    [ScriptedImporter(1, Texture3DAtlasImporter.kFileExtension)]
+    public class Texture3DAtlasImporter : ScriptedImporter
     {
         [Tooltip("Selects how the Texture behaves when tiled.")]
         [SerializeField]
@@ -115,7 +115,7 @@ namespace Oddworm.EditorFramework
         /// <summary>
         /// The file extension used for Texture3D assets without leading dot.
         /// </summary>
-        public const string kFileExtension = "texture3d";
+        public const string kFileExtension = "texture3datlas";
 
         public override void OnImportAsset(AssetImportContext ctx)
         {
@@ -390,7 +390,7 @@ namespace Oddworm.EditorFramework
             return "Unhandled validation issue.";
         }
 
-        [MenuItem("Assets/Create/Texture3D", priority = 315)]
+        [MenuItem("Assets/Create/Texture3D Atlas", priority = 315)]
         static void CreateTexture3DMenuItem()
         {
             // https://forum.unity.com/threads/how-to-implement-create-new-asset.759662/
@@ -410,9 +410,9 @@ namespace Oddworm.EditorFramework
             if (string.IsNullOrEmpty(directoryPath))
                 directoryPath = "Assets/";
 
-            var fileName = string.Format("New Texture3D.{0}", kFileExtension);
+            var fileName = string.Format("New Texture3D Atlas.{0}", kFileExtension);
             directoryPath = AssetDatabase.GenerateUniqueAssetPath(directoryPath + fileName);
-            ProjectWindowUtil.CreateAssetWithContent(directoryPath, "This file represents a Texture3D asset for Unity.\nYou need the 'Texture3D Import Pipeline' package available at https://github.com/pschraut/UnityTexture3DImportPipeline to properly import this file in Unity.");
+            ProjectWindowUtil.CreateAssetWithContent(directoryPath, "This file represents a Texture3D asset for Unity.\nYou need the 'Texture3D Atlas Import Pipeline' package available at https://github.com/pschraut/UnityTexture3DAtlasImportPipeline to properly import this file in Unity.");
         }
     }
 }

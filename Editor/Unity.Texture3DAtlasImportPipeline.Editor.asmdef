@@ -1,5 +1,5 @@
 {
-    "name": "Unity.Texture3DImportPipeline.Editor",
+    "name": "Unity.Texture3DAtlasImportPipeline.Editor",
     "references": [],
     "includePlatforms": [
         "Editor"

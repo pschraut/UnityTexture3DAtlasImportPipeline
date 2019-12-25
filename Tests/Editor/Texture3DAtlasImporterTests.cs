@@ -1,6 +1,6 @@
 ﻿//
 // Texture3D Importer for Unity. Copyright (c) 2019 Peter Schraut (www.console-dev.de). See LICENSE.md
-// https://github.com/pschraut/UnityTexture3DImportPipeline
+// https://github.com/pschraut/UnityTexture3DAtlasImportPipeline
 //
 using System.Collections;
 using System.Collections.Generic;
@@ -12,14 +12,14 @@ using Oddworm.EditorFramework;
 
 namespace Oddworm.EditorFramework.Tests
 {
-    class Texture3DImporterTests
+    class Texture3DAtlasImporterTests
     {
         /// <summary>
-        /// Creates a new Texture2DArray asset and returns the asset path.
+        /// Creates a new Texture3D atlas asset and returns the asset path.
         /// </summary>
         string BeginAssetTest()
         {
-            var path = AssetDatabase.GenerateUniqueAssetPath("Assets/" + string.Format("Test_Texture3D.{0}", Texture3DImporter.kFileExtension));
+            var path = AssetDatabase.GenerateUniqueAssetPath("Assets/" + string.Format("Test_Texture3DAtlas.{0}", Texture3DAtlasImporter.kFileExtension));
             System.IO.File.WriteAllText(path, "");
             AssetDatabase.Refresh();
             return path;
@@ -40,7 +40,7 @@ namespace Oddworm.EditorFramework.Tests
             var path = BeginAssetTest();
             try
             {
-                var importer = (Texture3DImporter)AssetImporter.GetAtPath(path);
+                var importer = (Texture3DAtlasImporter)AssetImporter.GetAtPath(path);
 
                 Assert.AreEqual(1, importer.anisoLevel);
                 Assert.AreEqual(FilterMode.Bilinear, importer.filterMode);
@@ -63,7 +63,7 @@ namespace Oddworm.EditorFramework.Tests
                 var filterMode = FilterMode.Trilinear;
                 var wrapMode = TextureWrapMode.Mirror;
 
-                var importer = (Texture3DImporter)AssetImporter.GetAtPath(path);
+                var importer = (Texture3DAtlasImporter)AssetImporter.GetAtPath(path);
                 importer.anisoLevel = anisoLevel;
                 importer.filterMode = filterMode;
                 importer.wrapMode = wrapMode;
@@ -71,7 +71,7 @@ namespace Oddworm.EditorFramework.Tests
                 importer.SaveAndReimport();
 
                 // Reload importer
-                importer = (Texture3DImporter)AssetImporter.GetAtPath(path);
+                importer = (Texture3DAtlasImporter)AssetImporter.GetAtPath(path);
 
                 Assert.AreEqual(anisoLevel, importer.anisoLevel);
                 Assert.AreEqual(filterMode, importer.filterMode);
@@ -92,7 +92,7 @@ namespace Oddworm.EditorFramework.Tests
             try
             {
                 System.Exception exception = null;
-                var importer = (Texture3DImporter)AssetImporter.GetAtPath(path);
+                var importer = (Texture3DAtlasImporter)AssetImporter.GetAtPath(path);
                 var texture = new Texture2D(64, 64, TextureFormat.RGB24, true);
 
                 try
@@ -124,7 +124,7 @@ namespace Oddworm.EditorFramework.Tests
             try
             {
                 System.Exception exception = null;
-                var importer = (Texture3DImporter)AssetImporter.GetAtPath(path);
+                var importer = (Texture3DAtlasImporter)AssetImporter.GetAtPath(path);
 
                 try
                 {
@@ -149,7 +149,7 @@ namespace Oddworm.EditorFramework.Tests
             try
             {
                 System.Exception exception = null;
-                var importer = (Texture3DImporter)AssetImporter.GetAtPath(path);
+                var importer = (Texture3DAtlasImporter)AssetImporter.GetAtPath(path);
 
                 try
                 {

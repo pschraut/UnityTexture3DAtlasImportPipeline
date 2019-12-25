@@ -1,6 +1,6 @@
 ﻿//
 // Texture3D Importer for Unity. Copyright (c) 2019 Peter Schraut (www.console-dev.de). See LICENSE.md
-// https://github.com/pschraut/UnityTexture3DImportPipeline
+// https://github.com/pschraut/UnityTexture3DAtlasImportPipeline
 //
 #pragma warning disable IDE1006, IDE0017
 using System.Collections;
@@ -13,8 +13,8 @@ using UnityEditorInternal;
 namespace Oddworm.EditorFramework
 {
     [CanEditMultipleObjects]
-    [CustomEditor(typeof(Texture3DImporter), true)]
-    class Texture3DImporterInspector : ScriptedImporterEditor
+    [CustomEditor(typeof(Texture3DAtlasImporter), true)]
+    class Texture3DAtlasImporterInspector : ScriptedImporterEditor
     {
         class Styles
         {
@@ -136,7 +136,7 @@ namespace Oddworm.EditorFramework
 
             menu.AddItem(new GUIContent("Select Textures"), false, delegate ()
             {
-                var importer = target as Texture3DImporter;
+                var importer = target as Texture3DAtlasImporter;
                 Selection.objects = importer.textures;
             });
 
@@ -154,7 +154,7 @@ namespace Oddworm.EditorFramework
 
             var r = rect;
 
-            var importer = target as Texture3DImporter;
+            var importer = target as Texture3DAtlasImporter;
             var textureProperty = m_Textures.GetArrayElementAtIndex(index);
 
             var errorMsg = importer.GetVerifyString(index);
@@ -164,8 +164,8 @@ namespace Oddworm.EditorFramework
                 rect.width = 24;
                 switch (importer.Verify(index))
                 {
-                    case Texture3DImporter.VerifyResult.Valid:
-                    case Texture3DImporter.VerifyResult.MasterNull:
+                    case Texture3DAtlasImporter.VerifyResult.Valid:
+                    case Texture3DAtlasImporter.VerifyResult.MasterNull:
                         break;
 
                     default:
@@ -200,7 +200,7 @@ namespace Oddworm.EditorFramework
                 // During my tests, when selecting built-in assets,
                 // Unity reimports the texture array asset infinitely, which is probably an Unity bug.
                 var result = importer.Verify(index);
-                if (result == Texture3DImporter.VerifyResult.NotAnAsset)
+                if (result == Texture3DAtlasImporter.VerifyResult.NotAnAsset)
                 {
                     textureProperty.objectReferenceValue = null;
                     var msg = importer.GetVerifyString(index);
