@@ -9,6 +9,16 @@ using UnityEditor.Experimental.AssetImporters;
 using System.IO;
 using System.Collections.Generic;
 
+// Graphics.CopyTexture is currently broken in Unity 2019.3 and older, perhaps newer.
+//
+// Therefore we use Texture2D.GetPixels and SetPixels to copy the texture contents
+// from a Texture2D to the Texture3D.
+// This not only is slower, it also requires both textures to use an uncompressed format 
+// and the source texture to be 'Read/Write Enable', in order to access its pixels.
+//
+// Once Unity Technologies fixes this bug, the Texture3D Importer would be able to
+// also support compressed Texture3D objects.
+//
 // https://forum.unity.com/threads/bug-in-graphics-copytexture-with-texture3d-slices.547456/
 
 namespace Oddworm.EditorFramework
@@ -31,7 +41,7 @@ namespace Oddworm.EditorFramework
         [SerializeField]
         int m_AnisoLevel = 1;
 
-        [Tooltip("A list of textures that are added to the texture array.")]
+        [Tooltip("A list of textures that are added to the Texture3D.")]
         [SerializeField]
         List<Texture2D> m_Textures = new List<Texture2D>();
 
@@ -52,6 +62,7 @@ namespace Oddworm.EditorFramework
 
         /// <summary>
         /// Gets or sets the textures that are being used to create the Texture3D.
+        /// Each Texture2D ends up as 'one slice' in the Texture3D object.
         /// </summary>
         public Texture2D[] textures
         {
