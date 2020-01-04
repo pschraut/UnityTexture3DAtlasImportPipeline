@@ -10,7 +10,7 @@
 Shader "Unlit/Texture3D" {
 Properties {
     _MainTex ("Base (RGB)", 3D) = "" {}
-	_Slice ("Slice", Range(0,1)) = 0
+	_Depth ("Depth", Range(0, 1)) = 0
 }
 
 SubShader {
@@ -42,7 +42,7 @@ SubShader {
 			UNITY_DECLARE_TEX3D(_MainTex);
             float4 _MainTex_ST;
 			UNITY_INSTANCING_BUFFER_START(Props)
-				UNITY_DEFINE_INSTANCED_PROP(float, _Slice)
+				UNITY_DEFINE_INSTANCED_PROP(float, _Depth)
 			UNITY_INSTANCING_BUFFER_END(Props)
 
             v2f vert (appdata_t v)
@@ -52,7 +52,7 @@ SubShader {
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.texcoord.xy = TRANSFORM_TEX(v.texcoord, _MainTex);
-				o.texcoord.z = UNITY_ACCESS_INSTANCED_PROP(Props, _Slice);
+				o.texcoord.z = UNITY_ACCESS_INSTANCED_PROP(Props, _Depth);
                 UNITY_TRANSFER_FOG(o,o.vertex);
                 return o;
             }
