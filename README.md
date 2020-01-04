@@ -19,7 +19,7 @@ In Unity's Package Manager, choose "Add package from git URL" and insert one of 
 # Unity Bugs
 | Bug | Description |
 |-----|-----------|
-| 1208825 | [Graphics.CopyTexture](https://docs.unity3d.com/ScriptReference/Graphics.CopyTexture.html) does not work with Texture3D. It causes that source textures have to be marked as "Read/Write Enabled". |
+| 1208825 | [Graphics.CopyTexture](https://docs.unity3d.com/ScriptReference/Graphics.CopyTexture.html) does not work with Texture3D. Due to the implemented workaround, it causes that source textures have to be marked as "Read/Write Enabled". |
 | 1208832 | Texture3D does not support compressed formats. Only RGBA32 and ARGB32 uncompressed texture formats are supported due to the implemented workaround. Using uncompressed textures requires more bandwidth and might lead to worse performance than necessary. |
 
 
