@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditor.Experimental.AssetImporters;
 using UnityEditorInternal;
+using UnityEngine.Rendering;
 
 namespace Oddworm.EditorFramework
 {
@@ -18,6 +19,16 @@ namespace Oddworm.EditorFramework
     {
         class Styles
         {
+            public readonly GUIContent[] previewButtonContents =
+            {
+                EditorGUIUtility.TrIconContent("PreTexRGB"),
+                EditorGUIUtility.TrIconContent("PreTexR"),
+                EditorGUIUtility.TrIconContent("PreTexG"),
+                EditorGUIUtility.TrIconContent("PreTexB"),
+                EditorGUIUtility.TrIconContent("PreTexA")
+            };
+
+            public readonly GUIStyle toolbarButton = "toolbarbutton";
             public readonly GUIStyle preButton = "RL FooterButton";
             public readonly Texture2D popupIcon = EditorGUIUtility.FindTexture("_Popup");
             public readonly Texture2D errorIcon = EditorGUIUtility.FindTexture("console.erroricon.sml");
@@ -33,6 +44,15 @@ namespace Oddworm.EditorFramework
             public readonly GUIContent anisotropicFilteringForceEnable = new GUIContent("Anisotropic filtering is enabled for all textures in Quality Settings.");
             public readonly GUIContent texturesHeaderLabel = new GUIContent("Textures", "Drag&drop one or multiple textures here to add them to the list.");
             public readonly GUIContent removeItemButton = new GUIContent("", EditorGUIUtility.FindTexture("Toolbar Minus"), "Remove from list.");
+            public readonly GUIStyle stepSlice = "TimeScrubberButton";
+            public readonly GUIStyle sliceScrubber = "TimeScrubber";
+            public static GUIStyle preSlider = "preSlider";
+            public static GUIStyle preSliderThumb = "preSliderThumb";
+            public static GUIStyle preLabel = "preLabel";
+            public static GUIContent smallZoom = EditorGUIUtility.IconContent("PreTextureMipMapLow");
+            public static GUIContent largeZoom = EditorGUIUtility.IconContent("PreTextureMipMapHigh");
+            public static GUIContent alphaIcon = EditorGUIUtility.IconContent("PreTextureAlpha");
+            public static GUIContent RGBIcon = EditorGUIUtility.IconContent("PreTextureRGB");
         }
 
         static Styles s_Styles;
@@ -51,6 +71,23 @@ namespace Oddworm.EditorFramework
         SerializedProperty m_Textures = null;
         ReorderableList m_TextureList = null;
 
+        enum PreviewMode
+        {
+            RGB = ColorWriteMask.All,
+            R = ColorWriteMask.Red | ColorWriteMask.Alpha,
+            G = ColorWriteMask.Green | ColorWriteMask.Alpha,
+            B = ColorWriteMask.Blue | ColorWriteMask.Alpha,
+            A = ColorWriteMask.Alpha,
+        }
+
+        private PreviewMode m_PreviewMode = PreviewMode.RGB;
+        float m_PreviewDepth = 0;
+        float m_PreviewMipLevel = -1;
+        bool m_PreviewValid = false;
+        bool m_PreviewInitialized = false;
+        Texture3D m_PreviewTexture = null;
+        Material m_PreviewMaterial = null;
+
         public override void OnEnable()
         {
             base.OnEnable();
@@ -64,6 +101,20 @@ namespace Oddworm.EditorFramework
             m_TextureList.displayRemove = false;
             m_TextureList.drawElementCallback += OnDrawElement;
             m_TextureList.drawHeaderCallback += OnDrawHeader;
+
+            m_PreviewValid = false;
+            m_PreviewInitialized = false;
+        }
+
+        public override void OnDisable()
+        {
+            if (m_PreviewMaterial != null)
+            {
+                DestroyImmediate(m_PreviewMaterial);
+                m_PreviewMaterial = null;
+            }
+
+            base.OnDisable();
         }
 
         public override void OnInspectorGUI()
@@ -249,6 +300,123 @@ namespace Oddworm.EditorFramework
 
             serializedObject.ApplyModifiedProperties();
             DragAndDrop.AcceptDrag();
+        }
+
+        void InitPreview()
+        {
+            if (m_PreviewInitialized)
+                return;
+
+            m_PreviewValid = false;
+            m_PreviewInitialized = true;
+            m_PreviewTexture = null;
+            m_PreviewMipLevel = 0;
+            m_PreviewMode = PreviewMode.RGB;
+
+            if (!ShaderUtil.hardwareSupportsRectRenderTexture)
+                return; // various inspector related preview functionality inside Unity requires this
+
+            if (!SystemInfo.supports3DTextures)
+                return;
+
+            var shader = Shader.Find("Hidden/Internal-Texture3D-Preview");
+            if (shader == null)
+                return;
+
+            m_PreviewMaterial = new Material(shader);
+            if (m_PreviewMaterial == null)
+                return;
+
+            var importer = target as AssetImporter;
+            if (importer == null)
+                return;
+
+            m_PreviewTexture = AssetDatabase.LoadAssetAtPath<Texture3D>(importer.assetPath);
+            if (m_PreviewTexture == null)
+                return;
+
+            m_PreviewValid = true;
+        }
+
+        public override void OnPreviewSettings()
+        {
+            base.OnPreviewSettings();
+            
+            InitPreview();
+            if (!m_PreviewValid)
+                return;
+
+            // Color mask buttons
+            m_PreviewMode = GUILayout.Toggle(m_PreviewMode == PreviewMode.RGB, styles.previewButtonContents[0], styles.toolbarButton) ? PreviewMode.RGB : m_PreviewMode;
+            m_PreviewMode = GUILayout.Toggle(m_PreviewMode == PreviewMode.R, styles.previewButtonContents[1], styles.toolbarButton) ? PreviewMode.R : m_PreviewMode;
+            m_PreviewMode = GUILayout.Toggle(m_PreviewMode == PreviewMode.G, styles.previewButtonContents[2], styles.toolbarButton) ? PreviewMode.G : m_PreviewMode;
+            m_PreviewMode = GUILayout.Toggle(m_PreviewMode == PreviewMode.B, styles.previewButtonContents[3], styles.toolbarButton) ? PreviewMode.B : m_PreviewMode;
+            m_PreviewMode = GUILayout.Toggle(m_PreviewMode == PreviewMode.A, styles.previewButtonContents[4], styles.toolbarButton) ? PreviewMode.A : m_PreviewMode;
+
+            // Display mipmap slider
+            using (new EditorGUI.DisabledGroupScope(m_PreviewTexture.mipmapCount == 1))
+            {
+                GUILayout.Box(Styles.smallZoom, Styles.preLabel);
+                m_PreviewMipLevel = Mathf.Round(GUILayout.HorizontalSlider(m_PreviewMipLevel, m_PreviewTexture.mipmapCount - 1, 0, Styles.preSlider, Styles.preSliderThumb, GUILayout.MaxWidth(64)));
+                GUILayout.Box(Styles.largeZoom, Styles.preLabel);
+            }
+        }
+
+        public override void OnInteractivePreviewGUI(Rect r, GUIStyle background)
+        {
+            base.OnInteractivePreviewGUI(r, background);
+            InitPreview();
+
+            // Draw toolbar background
+            var toolbarRect = r;
+            toolbarRect.height = styles.sliceScrubber.CalcHeight(new GUIContent("Wg"), 50);
+            if (Event.current.type == EventType.Repaint)
+            {
+                styles.sliceScrubber.Draw(toolbarRect, GUIContent.none, -1);
+            }
+
+            // Draw depth slider
+            var sliderRect = toolbarRect;
+            sliderRect.x += 4;
+            sliderRect.width -= 4+2;
+            sliderRect.y += 1; sliderRect.height -= 2;
+
+            m_PreviewDepth = EditorGUI.Slider(sliderRect, m_PreviewDepth, 0, 1);
+        }
+
+        public override void OnPreviewGUI(Rect r, GUIStyle background)
+        {
+            if (!m_PreviewValid)
+            {
+                if (Event.current.type == EventType.Repaint)
+                    EditorGUI.DropShadowLabel(new Rect(r.x, r.y, r.width, 40), "Can't render Texture3D preview.");
+                return;
+            }
+
+            // Display the currently selected mipmap level
+            if (m_PreviewMipLevel != 0)
+            {
+                var infoRect = r;
+                infoRect.y += 8;
+                infoRect.height = 30;
+
+                EditorGUI.DropShadowLabel(infoRect, string.Format("Mip {0}", m_PreviewMipLevel));
+            }
+
+            // Display the actual preview
+            var previewRect = r;
+            previewRect.y += 42;
+            previewRect.height -= 42 + 24;
+
+            m_PreviewMaterial.SetFloat("_Depth", m_PreviewDepth);
+
+            EditorGUI.DrawPreviewTexture(previewRect,
+                m_PreviewTexture,
+                m_PreviewMaterial,
+                ScaleMode.ScaleToFit,
+                0, // default image aspect
+                m_PreviewMipLevel,
+                (ColorWriteMask)m_PreviewMode);
         }
     }
 }
