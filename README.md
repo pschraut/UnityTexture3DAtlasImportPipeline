@@ -1,6 +1,6 @@
 # Texture3D Atlas Import Pipeline for Unity
 
-This editor-only Texture3D Atlas Import Pipeline package provides the ability to create a Texture3D asset from a collection of regular 2D textures. Unlike a Texture2DArray, a Texture3D supports to blend between its 'slices'.
+This editor-only Texture3D Atlas Import Pipeline package provides the ability to create a Texture3D asset from a collection of regular 2D textures. It's similar to a Texture2DArray, but a Texture3D Atlas supports to blend between its 'slices'.
 
 
 # Installation
@@ -16,6 +16,12 @@ In Unity's Package Manager, choose "Add package from git URL" and insert one of 
 | 1.0.0 | https://github.com/pschraut/UnityTexture3DAtlasImportPipeline.git#1.0.0 |
 
 
+# Unity Bugs
+| Bug | Description |
+|-----|-----------|
+| 1208825 | [Graphics.CopyTexture](https://docs.unity3d.com/ScriptReference/Graphics.CopyTexture.html) does not work with Texture3D. It causes that source textures have to be marked as "Read/Write Enabled". |
+| 1208832 | Texture3D does not support compressed formats. Only RGBA32 and ARGB32 uncompressed texture formats are supported due to the implemented workaround. Using uncompressed textures requires more bandwidth and might lead to worse performance than necessary. |
+
 
 # How it works
 
@@ -28,15 +34,22 @@ A Texture3D object is natively supported by Unity, but has no import pipeline ye
 Combined with a custom [ScriptedImporterEditor](https://docs.unity3d.com/ScriptReference/Experimental.AssetImporters.ScriptedImporterEditor.html),  the integration feels quite smooth.
 
 
-## Texture format and size (Known Issue!)
+## Texture format and size
 
-The texture format is currently limited to uncompressed only. This limitation is due to a bug in Unity, where [Graphics.CopyTexture](https://docs.unity3d.com/ScriptReference/Graphics.CopyTexture.html) fails for Texture3D objects. To workaround this bug, I use [GetPixels32](https://docs.unity3d.com/ScriptReference/Texture2D.GetPixels32.html)/SetPixels32 to copy data from one texture to the Texture3D object, but the limitation here is the texture must be uncompressed and have the 'Read/Write Enabled' flag ticked in the Texture Importer. This isn't an ideal solution, but when Unity Technologies fixes this issue, I can add support to use and generate compressed textures too.
-
-The texture size is taken from the first input texture, the texture used for slice 0. Thus the Texture3D asset will have the same size as the texture specified in slice 0. All input textures have to use the same size and format.
+The texture size and format of a Texture3D is taken from the first input texture, the texture used for slice 0. Thus the Texture3D asset will have the same size and format as the texture specified in slice 0. All input textures have to use the same size and format.
 
 Input textures are copied into the Texture3D with no modifications, thus they all need to match. If they don't match, you'll see an error why the Texture3D could not be created and the Texture3D is changed to solid magenta to indicate there is an issue that must be fixed.
 
-If you want to use different texture sizes for different target platforms, this is fully supported. You just need to specify it in the input textures, not in the Texture3D asset.
+If you want to use different texture formats/sizes for different target platforms, this is fully supported. You just need to specify the format and size in the input textures, not in the Texture3D asset
+
+### Limitation due to Unity bugs
+Because of the issues listed under "Unity bugs" in this document, the following limitation applies:
+
+The texture format is currently limited to RGBA32 and ARGB32 uncompressed texture formats only. This limitation is due to a bug in Unity, where [Graphics.CopyTexture](https://docs.unity3d.com/ScriptReference/Graphics.CopyTexture.html) fails for Texture3D objects.
+
+In order to workaround the CopyTexture bug, I use [GetPixels32](https://docs.unity3d.com/ScriptReference/Texture2D.GetPixels32.html)/SetPixels32 to copy data from one texture to the Texture3D object, but the limitation here is the texture must be RGBA32 or ARGB32 format and have the 'Read/Write Enabled' flag ticked in the Texture Importer. 
+
+This isn't an ideal solution, but once Unity Technologies fixes these issue, I can add support to use and generate compressed textures too.
 
 
 ## Dependency handling
