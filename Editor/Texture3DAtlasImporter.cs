@@ -153,6 +153,10 @@ namespace Oddworm.EditorFramework
             if (isValid)
             {
                 // If everything is valid, copy source textures over to the texture array.
+				
+				// Graphics.CopyTexture does not work with Texture3D, I submitted bug-report:
+				//   (Case 1208825) 2019.3: Graphics.CopyTexture does not work with Texture3D
+				// When Unity Technologies fixed this bug, I can use this code to copy data instead:
                 //for (var n = 0; n < m_Textures.Count; ++n)
                 //{
                 //    var source = m_Textures[n];
@@ -286,7 +290,10 @@ namespace Oddworm.EditorFramework
             if (masterImporter == null)
                 return VerifyResult.MasterNotAnAsset;
 
-            if (texture.format != TextureFormat.RGBA32 && texture.format != TextureFormat.ARGB32 && texture.format != TextureFormat.RGB24)
+            // Unity supports uncompressed Texture3D's only. I submitted the following bug-report:
+            //   (Case 1208832) 2019.3: Texture3D does not support compressed formats
+            // GetPixels/SetPixels limitation is that only RGBA32 and BGRA32 work.
+            if (texture.format != TextureFormat.RGBA32 && texture.format != TextureFormat.BGRA32)
                 return VerifyResult.NotUncompressed;
 
             if (texture.width != master.width)
