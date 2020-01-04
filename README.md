@@ -25,7 +25,7 @@ In Unity's Package Manager, choose "Add package from git URL" and insert one of 
 |-----|-----------|
 | 1208825 | [Graphics.CopyTexture](https://docs.unity3d.com/ScriptReference/Graphics.CopyTexture.html) does not work with Texture3D. Due to the implemented workaround, it causes that source textures have to be marked as "Read/Write Enabled". |
 | 1208832 | Texture3D does not support compressed formats. Only RGBA32 and ARGB32 uncompressed texture formats are supported due to the implemented workaround. Using uncompressed textures requires more bandwidth and might lead to worse performance than necessary. |
-| n/a | Previewing another mipmap level than 0 causes the preview to show what looks like "depth 0" always. I haven't figured out whether this issue is me using Texture3D or its shader in a wrong way, or perhaps an Unity bug. |
+| [1114941](https://issuetracker.unity3d.com/issues/webgl-3d-texture-lookups-tex3dlod-in-shader-are-always-0) | Previewing another mipmap level than 0 causes the preview to show what looks like "depth 0" always. |
 
 
 # How it works
