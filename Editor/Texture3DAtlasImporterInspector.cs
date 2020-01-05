@@ -80,9 +80,9 @@ namespace Oddworm.EditorFramework
             A = ColorWriteMask.Alpha,
         }
 
-        private PreviewMode m_PreviewMode = PreviewMode.RGB;
+        PreviewMode m_PreviewMode = PreviewMode.RGB;
         float m_PreviewDepth = 0;
-        float m_PreviewMipLevel = -1;
+        float m_PreviewMipLevel = 0;
         bool m_PreviewValid = false;
         bool m_PreviewInitialized = false;
         Texture3D m_PreviewTexture = null;
