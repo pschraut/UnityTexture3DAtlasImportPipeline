@@ -50,9 +50,8 @@ If you want to use different texture formats/sizes for different target platform
 ### Limitation due to Unity bugs
 Because of the issues listed under "Unity bugs" in this document, the following limitation applies:
 
-The texture format is currently limited to RGBA32 and ARGB32 uncompressed texture formats only. This limitation is due to a bug in Unity, where [Graphics.CopyTexture](https://docs.unity3d.com/ScriptReference/Graphics.CopyTexture.html) fails for Texture3D objects.
-
-In order to workaround the CopyTexture bug, I use [GetPixels32](https://docs.unity3d.com/ScriptReference/Texture2D.GetPixels32.html)/SetPixels32 to copy data from one texture to the Texture3D object, but the limitation here is the texture must be RGBA32 or ARGB32 format and have the 'Read/Write Enabled' flag ticked in the Texture Importer. 
+* The texture format is currently limited to RGBA32 and ARGB32 uncompressed texture formats only, because Unity allows to create Texture3D's with these two formats only.
+* The texture must tick the 'Read/Write Enabled' flag ticked in the Texture Importer, because [Graphics.CopyTexture](https://docs.unity3d.com/ScriptReference/Graphics.CopyTexture.html) fails for Texture3D objects and to workaround this issue, I use [GetPixels32](https://docs.unity3d.com/ScriptReference/Texture2D.GetPixels32.html)/SetPixels32 to copy data from one texture to the Texture3D object. 
 
 This isn't an ideal solution, but once Unity Technologies fixes these issue, I can add support to use and generate compressed textures too.
 
