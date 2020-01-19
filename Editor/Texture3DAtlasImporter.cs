@@ -58,6 +58,7 @@ namespace Oddworm.EditorFramework
             NotAnAsset,
             MasterNotAnAsset,
             NotUncompressed,
+            NotReadable,
         }
 
         /// <summary>
@@ -292,9 +293,14 @@ namespace Oddworm.EditorFramework
 
             // Unity supports uncompressed Texture3D's only. I submitted the following bug-report:
             //   (Case 1208832) 2019.3: Texture3D does not support compressed formats
-            // GetPixels/SetPixels limitation is that only RGBA32 and BGRA32 work.
             if (texture.format != TextureFormat.RGBA32 && texture.format != TextureFormat.BGRA32)
                 return VerifyResult.NotUncompressed;
+
+            // GetPixels/SetPixels limitation is that only RGBA32 and BGRA32 work, 
+            // thus this workaround is also related to bug report:
+            //   (Case 1208832) 2019.3: Texture3D does not support compressed formats
+            if (!textureImporter.isReadable)
+                return VerifyResult.NotReadable;
 
             if (texture.width != master.width)
                 return VerifyResult.WidthMismatch;
@@ -343,7 +349,15 @@ namespace Oddworm.EditorFramework
                     {
                         var texture = m_Textures[slice];
 
-                        return string.Format("Texture '{0}' must use an uncompressed texture format, such as RGBA32 or RGB24, but is using '{1}' instead.",
+                        return string.Format("Texture '{0}' must use uncompressed texture format 'RGBA32' or 'ARGB32', but is using '{1}' instead. You can change the texture format in the Unity Texture Inspector 'Format' dropdown field.",
+                            texture.name, texture.format);
+                    }
+
+                case VerifyResult.NotReadable:
+                    {
+                        var texture = m_Textures[slice];
+
+                        return string.Format("Texture '{0}' must enable 'Read/Write Enabled'. You can change this setting in the Unity Texture Inspector under the 'Advanced' foldout.",
                             texture.name, texture.format);
                     }
 
