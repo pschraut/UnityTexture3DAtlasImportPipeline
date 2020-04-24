@@ -27,7 +27,7 @@ In Unity's Package Manager, choose "Add package from git URL" and insert one of 
 | [1208832](https://issuetracker.unity3d.com/issues/unable-to-create-a-texture3d-with-a-compressed-format) | n/a | Texture3D does not support compressed formats. Only RGBA32 and ARGB32 uncompressed texture formats are supported due to the implemented workaround. Using uncompressed textures requires more bandwidth and might lead to worse performance than necessary. |
 | [1114941](https://issuetracker.unity3d.com/issues/webgl-3d-texture-lookups-tex3dlod-in-shader-are-always-0) | n/a | Previewing another mipmap level than 0 causes the preview to show what looks like "depth 0" always. |
 | [1212874](https://forum.unity.com/threads/case-1212874-asset-pipeline-v2-breaks-scriptedimporter-functionality.811833/) | n/a | Asset Pipeline v2 breaks ScriptedImporter functionality |
-| 1218264 | n/a | Creating a Texture3D asset using this import pipeline causes Unity 2020.1 alpha to crash. |
+| [1218264](https://forum.unity.com/threads/case-1241288-creating-texture3d-asset-causes-editor-crash.875782/) | n/a | Creating a Texture3D asset causes Unity 2020.1 beta to crash. |
 
 
 # How it works
