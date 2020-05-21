@@ -1,7 +1,30 @@
 ﻿//
-// Texture3D Importer for Unity. Copyright (c) 2019 Peter Schraut (www.console-dev.de). See LICENSE.md
+// Texture3D Importer for Unity. Copyright (c) 2019-2020 Peter Schraut (www.console-dev.de). See LICENSE.md
 // https://github.com/pschraut/UnityTexture3DAtlasImportPipeline
 //
+#if UNITY_2020_1_OR_NEWER
+
+// (Case 1208832) 2019.3: Texture3D does not support compressed formats
+// https://issuetracker.unity3d.com/product/unity/issues/guid/1208832
+//#define FIXED_COMPRESSION
+
+// (Case 1208825) 2019.3: Graphics.CopyTexture does not work with Texture3D
+// https://issuetracker.unity3d.com/product/unity/issues/guid/1208825
+//
+// Graphics.CopyTexture is broken in Unity 2019.3 and older.
+//
+// Therefore I use Texture2D.GetPixels and SetPixels to copy the texture contents from a Texture2D to the Texture3D.
+// This is not only is slower, but it also requires both textures to use an uncompressed format 
+// and the source texture to be 'Read/Write Enable', in order to access its pixels.
+//
+// Once Unity Technologies fixes this bug, the Texture3D Importer would be able to
+// also support compressed Texture3D objects.
+//
+// https://forum.unity.com/threads/bug-in-graphics-copytexture-with-texture3d-slices.547456/
+#define FIXED_COPYTEXTURE
+
+#endif // UNITY_2020_1_OR_NEWER
+
 #pragma warning disable IDE1006, IDE0017
 using UnityEngine;
 using UnityEditor;
@@ -9,17 +32,7 @@ using UnityEditor.Experimental.AssetImporters;
 using System.IO;
 using System.Collections.Generic;
 
-// Graphics.CopyTexture is currently broken in Unity 2019.3 and older, perhaps newer.
-//
-// Therefore we use Texture2D.GetPixels and SetPixels to copy the texture contents
-// from a Texture2D to the Texture3D.
-// This not only is slower, it also requires both textures to use an uncompressed format 
-// and the source texture to be 'Read/Write Enable', in order to access its pixels.
-//
-// Once Unity Technologies fixes this bug, the Texture3D Importer would be able to
-// also support compressed Texture3D objects.
-//
-// https://forum.unity.com/threads/bug-in-graphics-copytexture-with-texture3d-slices.547456/
+
 
 namespace Oddworm.EditorFramework
 {
@@ -154,16 +167,13 @@ namespace Oddworm.EditorFramework
             if (isValid)
             {
                 // If everything is valid, copy source textures over to the texture array.
-				
-				// Graphics.CopyTexture does not work with Texture3D, I submitted bug-report:
-				//   (Case 1208825) 2019.3: Graphics.CopyTexture does not work with Texture3D
-				// When Unity Technologies fixed this bug, I can use this code to copy data instead:
-                //for (var n = 0; n < m_Textures.Count; ++n)
-                //{
-                //    var source = m_Textures[n];
-                //    Graphics.CopyTexture(source, 0, texture3D, n);
-                //}
-
+#if FIXED_COPYTEXTURE
+                for (var n = 0; n < m_Textures.Count; ++n)
+                {
+                    var source = m_Textures[n];
+                    Graphics.CopyTexture(source, 0, texture3D, n);
+                }
+#else
                 var colorData = new Color32[width * height * texture3D.depth];
 
                 for (var n = 0; n < m_Textures.Count; ++n)
@@ -175,6 +185,7 @@ namespace Oddworm.EditorFramework
 
                 texture3D.SetPixels32(colorData);
                 texture3D.Apply();
+#endif
             }
             else
             {
@@ -291,16 +302,18 @@ namespace Oddworm.EditorFramework
             if (masterImporter == null)
                 return VerifyResult.MasterNotAnAsset;
 
+#if !FIXED_COMPRESSION
             // Unity supports uncompressed Texture3D's only. I submitted the following bug-report:
             //   (Case 1208832) 2019.3: Texture3D does not support compressed formats
             if (texture.format != TextureFormat.RGBA32 && texture.format != TextureFormat.BGRA32)
                 return VerifyResult.NotUncompressed;
+#endif
 
-            // GetPixels/SetPixels limitation is that only RGBA32 and BGRA32 work, 
-            // thus this workaround is also related to bug report:
-            //   (Case 1208832) 2019.3: Texture3D does not support compressed formats
+#if !FIXED_COPYTEXTURE
+            // GetPixels/SetPixels work with RGBA32 and BGRA32 formats only.
             if (!textureImporter.isReadable)
                 return VerifyResult.NotReadable;
+#endif
 
             if (texture.width != master.width)
                 return VerifyResult.WidthMismatch;
