@@ -1,7 +1,19 @@
 ﻿//
-// Texture3D Importer for Unity. Copyright (c) 2019 Peter Schraut (www.console-dev.de). See LICENSE.md
+// Texture3D Importer for Unity. Copyright (c) 2019-2020 Peter Schraut (www.console-dev.de). See LICENSE.md
 // https://github.com/pschraut/UnityTexture3DAtlasImportPipeline
 //
+
+#if UNITY_2020_1_OR_NEWER
+// Unity 2020.1 and newer has a built-in Texture3D preview inspector
+#else
+// Unity 2019.3 does not have a Texture3D preview in the inspector.
+// I implemented a custom preview instead, which you can find in this file.
+// I use this define to toggle the custom preview, because newer Unity
+// versions have built-in support and the built-in Texture3D preview is
+// way better than what I implemented.
+#define USE_CUSTOM_PREVIEW
+#endif
+
 #pragma warning disable IDE1006, IDE0017
 using System.Collections;
 using System.Collections.Generic;
@@ -80,6 +92,7 @@ namespace Oddworm.EditorFramework
             A = ColorWriteMask.Alpha,
         }
 
+#if USE_CUSTOM_PREVIEW
         PreviewMode m_PreviewMode = PreviewMode.RGB;
         float m_PreviewDepth = 0;
         float m_PreviewMipLevel = 0;
@@ -87,6 +100,7 @@ namespace Oddworm.EditorFramework
         bool m_PreviewInitialized = false;
         Texture3D m_PreviewTexture = null;
         Material m_PreviewMaterial = null;
+#endif
 
         public override void OnEnable()
         {
@@ -102,17 +116,21 @@ namespace Oddworm.EditorFramework
             m_TextureList.drawElementCallback += OnDrawElement;
             m_TextureList.drawHeaderCallback += OnDrawHeader;
 
+#if USE_CUSTOM_PREVIEW
             m_PreviewValid = false;
             m_PreviewInitialized = false;
+#endif
         }
 
         public override void OnDisable()
         {
+#if USE_CUSTOM_PREVIEW
             if (m_PreviewMaterial != null)
             {
                 DestroyImmediate(m_PreviewMaterial);
                 m_PreviewMaterial = null;
             }
+#endif
 
             base.OnDisable();
         }
@@ -302,6 +320,7 @@ namespace Oddworm.EditorFramework
             DragAndDrop.AcceptDrag();
         }
 
+#if USE_CUSTOM_PREVIEW
         void InitPreview()
         {
             if (m_PreviewInitialized)
@@ -418,5 +437,6 @@ namespace Oddworm.EditorFramework
                 m_PreviewMipLevel,
                 (ColorWriteMask)m_PreviewMode);
         }
+#endif // USE_CUSTOM_PREVIEW
     }
 }
