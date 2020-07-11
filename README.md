@@ -28,6 +28,7 @@ In Unity's Package Manager, choose "Add package from git URL" and insert one of 
 | [1212874](https://forum.unity.com/threads/case-1212874-asset-pipeline-v2-breaks-scriptedimporter-functionality.811833/) | n/a | Asset Pipeline v2 breaks ScriptedImporter functionality. |
 | [1218264](https://forum.unity.com/threads/case-1241288-creating-texture3d-asset-causes-editor-crash.875782/) | 2020.2.0a13, 2020.1.0b11, 2019.3.16 | Creating a Texture3D asset causes Unity 2020.1 beta to crash on old Intel CPUs (pre-SSE4.2), due to a regression in Graphics.DrawProceduralNow. |
 | [1249421](https://issuetracker.unity3d.com/issues/an-error-is-thrown-in-the-console-window-when-copying-a-compressed-texture2d-with-graphics-dot-copytexture-to-texture3d)| 2020.2.0a16 | An error is thrown in the Console Window when copying a Compressed Texture2D with Graphics.CopyTexture to Texture3D |
+| [1249421](https://forum.unity.com/threads/case-1262413-graphics-copytexture-doesnt-work-to-copy-compressed-texture2d-in-texture3d.929628/)| n/a | Using Graphics.CopyTexture to copy the content of a Texture2D object in a Texture3D slice, does not work, if the Texture2D uses a compressed texture format. |
 
 # How it works
 
