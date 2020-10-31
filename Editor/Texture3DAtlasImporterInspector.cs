@@ -15,8 +15,6 @@
 #endif
 
 #pragma warning disable IDE1006, IDE0017
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
@@ -149,7 +147,7 @@ namespace Oddworm.EditorFramework
         {
             serializedObject.Update();
 
-            // This is just some visual nonsense to make it look&feel 
+            // This is just some visual nonsense to make it look&feel
             // similar to Unity's Texture Inspector.
             using (new EditorGUI.DisabledGroupScope(true))
             {
@@ -370,7 +368,7 @@ namespace Oddworm.EditorFramework
         public override void OnPreviewSettings()
         {
             base.OnPreviewSettings();
-            
+
             InitPreview();
             if (!m_PreviewValid)
                 return;

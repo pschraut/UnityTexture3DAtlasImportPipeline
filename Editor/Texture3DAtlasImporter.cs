@@ -14,7 +14,7 @@
 // Graphics.CopyTexture is broken in Unity 2019.3 and older.
 //
 // Therefore I use Texture2D.GetPixels and SetPixels to copy the texture contents from a Texture2D to the Texture3D.
-// This is not only is slower, but it also requires both textures to use an uncompressed format 
+// This is not only is slower, but it also requires both textures to use an uncompressed format
 // and the source texture to be 'Read/Write Enable', in order to access its pixels.
 //
 // Once Unity Technologies fixes this bug, the Texture3D Importer would be able to
@@ -84,7 +84,7 @@ namespace Oddworm.EditorFramework
         public Texture2D[] textures
         {
             get { return m_Textures.ToArray(); }
-            set 
+            set
             {
                 if (value == null)
                     throw new System.NotSupportedException("'textures' must not be set to 'null'. If you want to clear the Texture2D, set it to a zero-sized array instead.");
@@ -220,7 +220,7 @@ namespace Oddworm.EditorFramework
                     ctx.DependsOnSourceAsset(path);
                 }
             }
-            
+
             ctx.AddObjectToAsset("Texture3D", texture3D);
             ctx.SetMainObject(texture3D);
 

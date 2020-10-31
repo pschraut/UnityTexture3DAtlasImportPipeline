@@ -2,13 +2,10 @@
 // Texture3D Importer for Unity. Copyright (c) 2019 Peter Schraut (www.console-dev.de). See LICENSE.md
 // https://github.com/pschraut/UnityTexture3DAtlasImportPipeline
 //
-using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
-using UnityEngine.TestTools;
 using UnityEditor;
-using Oddworm.EditorFramework;
 
 namespace Oddworm.EditorFramework.Tests
 {
@@ -198,7 +195,7 @@ namespace Oddworm.EditorFramework.Tests
                 var dstPath0 = AssetDatabase.GenerateUniqueAssetPath("Assets/" + System.IO.Path.GetFileName(srcPath0));
                 var dstPath1 = AssetDatabase.GenerateUniqueAssetPath("Assets/" + System.IO.Path.GetFileName(srcPath1));
                 var dstPath2 = AssetDatabase.GenerateUniqueAssetPath("Assets/" + System.IO.Path.GetFileName(srcPath2));
-                
+
                 // Make sure to remove the test assets afterwards
                 cleanup.Add(dstPath0);
                 cleanup.Add(dstPath1);
@@ -212,7 +209,7 @@ namespace Oddworm.EditorFramework.Tests
 
                 // Assign test textures to test 3d texture
                 var importerTex3d = (Texture3DAtlasImporter)AssetImporter.GetAtPath(path);
-                importerTex3d.textures = new Texture2D[] 
+                importerTex3d.textures = new Texture2D[]
                 {
                     AssetDatabase.LoadAssetAtPath<Texture2D>(dstPath0),
                     AssetDatabase.LoadAssetAtPath<Texture2D>(dstPath1),
