@@ -19,9 +19,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using UnityEditor.Experimental.AssetImporters;
 using UnityEditorInternal;
 using UnityEngine.Rendering;
+
+#if UNITY_2020_2_OR_NEWER
+using UnityEditor.AssetImporters;
+#else
+using UnityEditor.Experimental.AssetImporters;
+#endif
 
 namespace Oddworm.EditorFramework
 {
