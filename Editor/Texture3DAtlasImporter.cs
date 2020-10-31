@@ -2,12 +2,7 @@
 // Texture3D Importer for Unity. Copyright (c) 2019-2020 Peter Schraut (www.console-dev.de). See LICENSE.md
 // https://github.com/pschraut/UnityTexture3DAtlasImportPipeline
 //
-#if UNITY_2020_1_OR_NEWER
-
-// (Case 1208832) 2019.3: Texture3D does not support compressed formats
-// https://issuetracker.unity3d.com/product/unity/issues/guid/1208832
-//#define FIXED_COMPRESSION
-
+#if UNITY_2019_3_OR_NEWER
 // (Case 1208825) 2019.3: Graphics.CopyTexture does not work with Texture3D
 // https://issuetracker.unity3d.com/product/unity/issues/guid/1208825
 //
@@ -22,8 +17,13 @@
 //
 // https://forum.unity.com/threads/bug-in-graphics-copytexture-with-texture3d-slices.547456/
 #define FIXED_COPYTEXTURE
+#endif
 
-#endif // UNITY_2020_1_OR_NEWER
+#if UNITY_2019_3_OR_NEWER
+// (Case 1208832) 2019.3: Texture3D does not support compressed formats
+// https://issuetracker.unity3d.com/product/unity/issues/guid/1208825
+#define FIXED_COMPRESSION
+#endif
 
 #pragma warning disable IDE1006, IDE0017
 using UnityEngine;
