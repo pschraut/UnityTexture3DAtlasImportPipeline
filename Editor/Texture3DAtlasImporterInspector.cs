@@ -127,6 +127,11 @@ namespace Oddworm.EditorFramework
 #endif
         }
 
+        public override bool showImportedObject
+        {
+            get { return false; }
+        }
+
         public override void OnDisable()
         {
 #if USE_CUSTOM_PREVIEW
