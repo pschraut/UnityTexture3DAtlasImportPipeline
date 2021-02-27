@@ -34,7 +34,7 @@ Something like "Texture3D Atlas Import Pipeline by Peter Schraut" or "Thanks to 
 | [1208832](https://issuetracker.unity3d.com/issues/unable-to-create-a-texture3d-with-a-compressed-format) | 2020.2.0b8, 2020.1 | Texture3D does not support compressed formats. Texture3DAtlas only supports RGBA32/ARGB32 uncompressed texture formats in 2019.3/.4. Using uncompressed textures requires more bandwidth and might lead to worse performance than necessary. If you want to this this bug fixed in Unity 2019.4, please [submit a bug-report to Unity Technologies](https://unity3d.com/unity/qa/bug-reporting). |
 | [1249421](https://issuetracker.unity3d.com/issues/an-error-is-thrown-in-the-console-window-when-copying-a-compressed-texture2d-with-graphics-dot-copytexture-to-texture3d)| 2020.2.0a16 | An error is thrown in the Console Window when copying a Compressed Texture2D with Graphics.CopyTexture to Texture3D.  If you want to this this bug fixed in Unity 2019.4, please [submit a bug-report to Unity Technologies](https://unity3d.com/unity/qa/bug-reporting).|
 | [1262413](https://forum.unity.com/threads/case-1262413-graphics-copytexture-doesnt-work-to-copy-compressed-texture2d-in-texture3d.929628/)| n/a | Using Graphics.CopyTexture to copy the content of a Texture2D object in a Texture3D slice, does not work, if the Texture2D uses a compressed texture format.  If you want to this this bug fixed in Unity 2019.4, please [submit a bug-report to Unity Technologies](https://unity3d.com/unity/qa/bug-reporting).|
-
+| [1317998](https://forum.unity.com/threads/case-1317998-texture2darray-texture3d-compressed-texture-format-is-not-supported-on-this-platform.1066052/)|n/a|Creating a Texture3D Atlas with any compressed texture format causes the editor to output "<TextureFormat> is not supported on this platform. Decompressing texture.", yet Unity is able to create the object with this particular texture format. At least the Inspector displays it's using that format.|
 
 # How it works
 
@@ -58,10 +58,8 @@ If you want to use different texture formats/sizes for different target platform
 ### Limitation due to Unity bugs
 Because of the issues listed under "Unity bugs" in this document, the following limitation applies:
 
-* The texture format is currently limited to RGBA32 and ARGB32 uncompressed texture formats only, because Unity allows to create Texture3D's with these two formats only.
-* The texture must tick the 'Read/Write Enabled' flag ticked in the Texture Importer, because [Graphics.CopyTexture](https://docs.unity3d.com/ScriptReference/Graphics.CopyTexture.html) fails for Texture3D objects and to workaround this issue, I use [GetPixels32](https://docs.unity3d.com/ScriptReference/Texture2D.GetPixels32.html)/SetPixels32 to copy data from one texture to the Texture3D object. 
+* The Texture3DAtlas texture format is currently limited to RGBA32/ARGB32 uncompressed in Unity 2019.3/.4.
 
-This isn't an ideal solution, but once Unity Technologies fixes these issue, I can add support to use and generate compressed textures too.
 
 
 ## Dependency handling
