@@ -19,9 +19,9 @@
 #define FIXED_COPYTEXTURE
 #endif
 
-#if UNITY_2019_3_OR_NEWER
-// (Case 1208832) 2019.3: Texture3D does not support compressed formats
-// https://issuetracker.unity3d.com/product/unity/issues/guid/1208825
+#if UNITY_2020_1_OR_NEWER
+// (Case 1208832) Texture3D does not support compressed formats
+// https://issuetracker.unity3d.com/issues/unable-to-create-a-texture3d-with-a-compressed-format
 #define FIXED_COMPRESSION
 #endif
 
@@ -263,7 +263,7 @@ namespace Oddworm.EditorFramework
             if (!SystemInfo.supports3DTextures)
             {
                 if (logToConsole)
-                    ctx.LogImportError(string.Format("Import failed '{0}'. Your system does not support Texture3D.", ctx.assetPath), ctx.mainObject);
+                    ctx.LogImportError($"Import failed '{ctx.assetPath}'. Your system does not support Texture3D.", ctx.mainObject);
 
                 return false;
             }
@@ -273,7 +273,7 @@ namespace Oddworm.EditorFramework
                 if (m_Textures[0] == null)
                 {
                     if (logToConsole)
-                        ctx.LogImportError(string.Format("Import failed '{0}'. The first element in the 'Textures' list must not be 'None'.", ctx.assetPath), ctx.mainObject);
+                        ctx.LogImportError($"Import failed '{ctx.assetPath}'. The first element in the 'Textures' list must not be 'None'.", ctx.mainObject);
 
                     return false;
                 }
@@ -291,7 +291,7 @@ namespace Oddworm.EditorFramework
                         var error = GetVerifyString(n);
                         if (!string.IsNullOrEmpty(error))
                         {
-                            var msg = string.Format("Import failed '{0}'. {1}", ctx.assetPath, error);
+                            var msg = $"Import failed '{ctx.assetPath}'. {error}";
                             ctx.LogImportError(msg, ctx.mainObject);
                         }
                     }
@@ -385,7 +385,7 @@ namespace Oddworm.EditorFramework
                     {
                         var texture = m_Textures[slice];
 
-                        return string.Format("Texture '{0}' must use uncompressed texture format 'RGBA32' or 'ARGB32', but is using '{1}' instead. You can change the texture format in the Unity Texture Inspector 'Format' dropdown field.",
+                        return string.Format("Texture '{0}' must use uncompressed texture format 'RGBA32' or 'ARGB32', but is using '{1}' instead. You can change the texture format in the Unity Texture Inspector 'Format' dropdown field. This issue has been fixed in Unity 2020.1 and newer, if you want to see it fixed in Unity 2019.4 too, please submit a bug-report to Unity Technologies: https://unity3d.com/unity/qa/bug-reporting",
                             texture.name, texture.format);
                     }
 
