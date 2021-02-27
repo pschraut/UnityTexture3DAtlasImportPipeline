@@ -2,22 +2,6 @@
 // Texture3D Importer for Unity. Copyright (c) 2019-2021 Peter Schraut (www.console-dev.de). See LICENSE.md
 // https://github.com/pschraut/UnityTexture3DAtlasImportPipeline
 //
-#if UNITY_2019_3_OR_NEWER
-// (Case 1208825) 2019.3: Graphics.CopyTexture does not work with Texture3D
-// https://issuetracker.unity3d.com/product/unity/issues/guid/1208825
-//
-// Graphics.CopyTexture is broken in Unity 2019.3 and older.
-//
-// Therefore I use Texture2D.GetPixels and SetPixels to copy the texture contents from a Texture2D to the Texture3D.
-// This is not only is slower, but it also requires both textures to use an uncompressed format
-// and the source texture to be 'Read/Write Enable', in order to access its pixels.
-//
-// Once Unity Technologies fixes this bug, the Texture3D Importer would be able to
-// also support compressed Texture3D objects.
-//
-// https://forum.unity.com/threads/bug-in-graphics-copytexture-with-texture3d-slices.547456/
-#define FIXED_COPYTEXTURE
-#endif
 
 #if UNITY_2020_1_OR_NEWER
 // (Case 1208832) Texture3D does not support compressed formats
@@ -74,7 +58,6 @@ namespace Oddworm.EditorFramework
             NotAnAsset,
             MasterNotAnAsset,
             NotUncompressed,
-            NotReadable,
         }
 
         /// <summary>
@@ -176,25 +159,11 @@ namespace Oddworm.EditorFramework
             if (isValid)
             {
                 // If everything is valid, copy source textures over to the texture array.
-#if FIXED_COPYTEXTURE
                 for (var n = 0; n < m_Textures.Count; ++n)
                 {
                     var source = m_Textures[n];
                     Graphics.CopyTexture(source, 0, texture3D, n);
                 }
-#else
-                var colorData = new Color32[width * height * texture3D.depth];
-
-                for (var n = 0; n < m_Textures.Count; ++n)
-                {
-                    var source = m_Textures[n];
-                    var sourcePixels = source.GetPixels32();
-                    System.Array.Copy(sourcePixels, 0, colorData, width * height * n, sourcePixels.Length);
-                }
-
-                texture3D.SetPixels32(colorData);
-                texture3D.Apply();
-#endif
             }
             else
             {
@@ -332,12 +301,6 @@ namespace Oddworm.EditorFramework
                 return VerifyResult.NotUncompressed;
 #endif
 
-#if !FIXED_COPYTEXTURE
-            // GetPixels/SetPixels work with RGBA32 and BGRA32 formats only.
-            if (!textureImporter.isReadable)
-                return VerifyResult.NotReadable;
-#endif
-
             if (texture.width != master.width)
                 return VerifyResult.WidthMismatch;
 
@@ -386,14 +349,6 @@ namespace Oddworm.EditorFramework
                         var texture = m_Textures[slice];
 
                         return string.Format("Texture '{0}' must use uncompressed texture format 'RGBA32' or 'ARGB32', but is using '{1}' instead. You can change the texture format in the Unity Texture Inspector 'Format' dropdown field. This issue has been fixed in Unity 2020.1 and newer, if you want to see it fixed in Unity 2019.4 too, please submit a bug-report to Unity Technologies: https://unity3d.com/unity/qa/bug-reporting",
-                            texture.name, texture.format);
-                    }
-
-                case VerifyResult.NotReadable:
-                    {
-                        var texture = m_Textures[slice];
-
-                        return string.Format("Texture '{0}' must enable 'Read/Write Enabled'. You can change this setting in the Unity Texture Inspector under the 'Advanced' foldout.",
                             texture.name, texture.format);
                     }
 

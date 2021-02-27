@@ -24,7 +24,6 @@ In Unity's Package Manager, choose "Add package from git URL" and insert one of 
 # Unity Bugs
 | Bug | Fixed in | Description |
 |-----|:--------:|-------------|
-| [1208825](https://issuetracker.unity3d.com/issues/2019-dot-3-graphics-dot-copytexture-does-not-work-with-texture3d) | 2020.2, 2020.1, 2019.3 | [Graphics.CopyTexture](https://docs.unity3d.com/ScriptReference/Graphics.CopyTexture.html) does not work with Texture3D. Due to the implemented workaround, it causes that source textures have to be marked as "Read/Write Enabled". |
 | [1208832](https://issuetracker.unity3d.com/issues/unable-to-create-a-texture3d-with-a-compressed-format) | 2020.2.0b8, 2020.1 | Texture3D does not support compressed formats. Texture3DAtlas only supports RGBA32/ARGB32 uncompressed texture formats in 2019.3/.4. Using uncompressed textures requires more bandwidth and might lead to worse performance than necessary. If you want to this this bug fixed in Unity 2019.4, please [submit a bug-report to Unity Technologies](https://unity3d.com/unity/qa/bug-reporting). |
 | [1212874](https://forum.unity.com/threads/case-1212874-asset-pipeline-v2-breaks-scriptedimporter-functionality.811833/) | n/a | Asset Pipeline v2 breaks ScriptedImporter functionality. |
 | [1218264](https://forum.unity.com/threads/case-1241288-creating-texture3d-asset-causes-editor-crash.875782/) | 2020.2.0a13, 2020.1.0b11, 2019.3.16 | Creating a Texture3D asset causes Unity 2020.1 beta to crash on old Intel CPUs (pre-SSE4.2), due to a regression in Graphics.DrawProceduralNow. |
