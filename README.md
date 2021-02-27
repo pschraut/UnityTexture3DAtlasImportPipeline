@@ -21,12 +21,19 @@ In Unity's Package Manager, choose "Add package from git URL" and insert one of 
 | 1.0.0 | https://github.com/pschraut/UnityTexture3DAtlasImportPipeline.git#1.0.0 |
 
 
+# Credits
+
+If you find this package useful, please mention my name in your credits screen.
+Something like "Texture3DAtlas Import Pipeline by Peter Schraut" or "Thanks to Peter Schraut" would be very much appreciated.
+
+
 # Unity Bugs
 | Bug | Fixed in | Description |
 |-----|:--------:|-------------|
 | [1208832](https://issuetracker.unity3d.com/issues/unable-to-create-a-texture3d-with-a-compressed-format) | 2020.2.0b8, 2020.1 | Texture3D does not support compressed formats. Texture3DAtlas only supports RGBA32/ARGB32 uncompressed texture formats in 2019.3/.4. Using uncompressed textures requires more bandwidth and might lead to worse performance than necessary. If you want to this this bug fixed in Unity 2019.4, please [submit a bug-report to Unity Technologies](https://unity3d.com/unity/qa/bug-reporting). |
 | [1249421](https://issuetracker.unity3d.com/issues/an-error-is-thrown-in-the-console-window-when-copying-a-compressed-texture2d-with-graphics-dot-copytexture-to-texture3d)| 2020.2.0a16 | An error is thrown in the Console Window when copying a Compressed Texture2D with Graphics.CopyTexture to Texture3D.  If you want to this this bug fixed in Unity 2019.4, please [submit a bug-report to Unity Technologies](https://unity3d.com/unity/qa/bug-reporting).|
 | [1262413](https://forum.unity.com/threads/case-1262413-graphics-copytexture-doesnt-work-to-copy-compressed-texture2d-in-texture3d.929628/)| n/a | Using Graphics.CopyTexture to copy the content of a Texture2D object in a Texture3D slice, does not work, if the Texture2D uses a compressed texture format.  If you want to this this bug fixed in Unity 2019.4, please [submit a bug-report to Unity Technologies](https://unity3d.com/unity/qa/bug-reporting).|
+
 
 # How it works
 
