@@ -4,6 +4,9 @@ All notable changes to this package are documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2021-??-??
+ - Fixed Texture3DAtlas not updating its texture format when changing the build target with [Asset Import Pipeline V2](https://blogs.unity3d.com/2019/10/31/the-new-asset-import-pipeline-solid-foundation-for-speeding-up-asset-imports/) being used. Thanks to Bastien for the help (actually providing the fix/workaround).
+
 ## [1.1.0] - 2020-10-31
 ### Fixed 
  - Don't display the Texture3DArray imported object twice in the Inspector
