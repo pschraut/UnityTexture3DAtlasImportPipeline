@@ -17,6 +17,7 @@ In Unity's Package Manager, choose "Add package from git URL" and insert one of 
 
 | Version  |     Link      |
 |----------|---------------|
+| 1.2.0 | https://github.com/pschraut/UnityTexture3DAtlasImportPipeline.git#1.2.0 |
 | 1.1.0 | https://github.com/pschraut/UnityTexture3DAtlasImportPipeline.git#1.1.0 |
 | 1.0.0 | https://github.com/pschraut/UnityTexture3DAtlasImportPipeline.git#1.0.0 |
 
@@ -24,7 +25,7 @@ In Unity's Package Manager, choose "Add package from git URL" and insert one of 
 # Credits
 
 If you find this package useful, please mention my name in your credits screen.
-Something like "Texture3DAtlas Import Pipeline by Peter Schraut" or "Thanks to Peter Schraut" would be very much appreciated.
+Something like "Texture3D Atlas Import Pipeline by Peter Schraut" or "Thanks to Peter Schraut" would be very much appreciated.
 
 
 # Unity Bugs
