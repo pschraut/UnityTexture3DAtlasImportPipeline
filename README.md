@@ -17,6 +17,7 @@ In Unity's Package Manager, choose "Add package from git URL" and insert one of 
 
 | Version  |     Link      |
 |----------|---------------|
+| 1.3.0 | https://github.com/pschraut/UnityTexture3DAtlasImportPipeline.git#1.3.0 |
 | 1.2.0 | https://github.com/pschraut/UnityTexture3DAtlasImportPipeline.git#1.2.0 |
 | 1.1.0 | https://github.com/pschraut/UnityTexture3DAtlasImportPipeline.git#1.1.0 |
 | 1.0.0 | https://github.com/pschraut/UnityTexture3DAtlasImportPipeline.git#1.0.0 |

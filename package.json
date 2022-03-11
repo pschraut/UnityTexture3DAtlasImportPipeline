@@ -1,6 +1,6 @@
 {
   "name": "com.oddworm.texture3datlasimportpipeline",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "displayName": "Texture3D Atlas Import Pipeline",
   "description": "This Texture3D Atlas Import Pipeline package provides the ability to create a Texture3D asset from a collection of regular 2D textures. Unlike a Texture2DArray, a Texture3D supports to blend between its 'slices'.",
   "documentationUrl": "https://github.com/pschraut/UnityTexture3DAtlasImportPipeline",
