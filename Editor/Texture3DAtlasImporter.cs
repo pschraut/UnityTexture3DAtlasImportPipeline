@@ -1,5 +1,5 @@
 ﻿//
-// Texture3D Importer for Unity. Copyright (c) 2019-2021 Peter Schraut (www.console-dev.de). See LICENSE.md
+// Texture3D Importer for Unity. Copyright (c) 2019-2022 Peter Schraut (www.console-dev.de). See LICENSE.md
 // https://github.com/pschraut/UnityTexture3DAtlasImportPipeline
 //
 
@@ -40,6 +40,9 @@ namespace Oddworm.EditorFramework
         [Range(0, 16)]
         [SerializeField]
         int m_AnisoLevel = 1;
+
+        [SerializeField]
+        bool m_IsReadable = false;
 
         [Tooltip("A list of textures that are added to the Texture3D.")]
         [SerializeField]
@@ -113,14 +116,24 @@ namespace Oddworm.EditorFramework
         }
 
         /// <summary>
+        /// Set this to true if you want texture data to be readable from scripts.
+        /// Set it to false to prevent scripts from reading texture data.
+        /// </summary>
+        public bool isReadable
+        {
+            get { return m_IsReadable; }
+            set { m_IsReadable = value; }
+        }
+
+        /// <summary>
         /// The file extension used for Texture3D assets without leading dot.
         /// </summary>
         public const string kFileExtension = "texture3datlas";
 
 #if UNITY_2020_1_OR_NEWER
-        const int k_VersionNumber = 202010;
+        const int k_VersionNumber = 202011;
 #else
-        const int k_VersionNumber = 201940;
+        const int k_VersionNumber = 201941;
 #endif
 
         public override void OnImportAsset(AssetImportContext ctx)
@@ -181,7 +194,7 @@ namespace Oddworm.EditorFramework
                     System.Array.Copy(errorPixels, 0, texture3DPixels, width * height * n, errorPixels.Length);
 
                 texture3D.SetPixels32(texture3DPixels);
-                texture3D.Apply();
+                texture3D.Apply(false, !m_IsReadable);
             }
 
             // Mark all input textures as dependency to the texture array.

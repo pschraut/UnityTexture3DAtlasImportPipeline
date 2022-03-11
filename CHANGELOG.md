@@ -4,6 +4,15 @@ All notable changes to this package are documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2022-03-11
+After installing this update, it will trigger a reimport of all Texture3DAtlas assets in the project and Texture3DAtlas's will no longer be readable via scripts by default.
+### Added
+ - Added ability to toggle whether the Texture3DAtlas is readable from scripts at the expense of consuming more memory when turned on. The default is off.
+
+### Changed
+ - Creating a new Texture3DAtlas asset will now no longer be readable from scripts by default. If you want to restore the previous behavior, you need to enable the ```Read/Write Enabled``` option.
+
+
 ## [1.2.0] - 2021-02-27
 ### Fixed 
  - Fixed Texture3DAtlas assuming Texture3D support for compressed formats ([Case 1208832](https://issuetracker.unity3d.com/issues/unable-to-create-a-texture3d-with-a-compressed-format)) works in Unity 2019.4. It works in Unity 2020.1 and newer only. Thanks to Richard for pointing this out.
