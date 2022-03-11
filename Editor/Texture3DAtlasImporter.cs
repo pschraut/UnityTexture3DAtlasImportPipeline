@@ -194,7 +194,6 @@ namespace Oddworm.EditorFramework
                     System.Array.Copy(errorPixels, 0, texture3DPixels, width * height * n, errorPixels.Length);
 
                 texture3D.SetPixels32(texture3DPixels);
-                texture3D.Apply(false, !m_IsReadable);
             }
 
             // Mark all input textures as dependency to the texture array.
@@ -223,6 +222,7 @@ namespace Oddworm.EditorFramework
 
             // this should have been named "MainAsset" to be conform with Unity, but changing it now
             // would break all existing Texture3DAtlas assets, so we don't touch it.
+            texture3D.Apply(false, !m_IsReadable);
             ctx.AddObjectToAsset("Texture3D", texture3D);
             ctx.SetMainObject(texture3D);
 
