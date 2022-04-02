@@ -14,7 +14,7 @@
 #define USE_CUSTOM_PREVIEW
 #endif
 
-#pragma warning disable IDE1006, IDE0017
+#pragma warning disable IDE1006, IDE0017, IDE0090
 using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
@@ -262,7 +262,7 @@ namespace Oddworm.EditorFramework
 
                 r = rect;
                 rect.width = 24;
-                EditorGUI.LabelField(rect, new GUIContent(string.Format("{0}", index), "Slice"), isFocused ? EditorStyles.whiteLabel : EditorStyles.label);
+                EditorGUI.LabelField(rect, new GUIContent($"{index}", "Slice"), isFocused ? EditorStyles.whiteLabel : EditorStyles.label);
                 rect = r;
                 rect.width -= 24;
                 rect.x += 24;
@@ -431,7 +431,7 @@ namespace Oddworm.EditorFramework
                 infoRect.y += 8;
                 infoRect.height = 30;
 
-                EditorGUI.DropShadowLabel(infoRect, string.Format("Mip {0}", m_PreviewMipLevel));
+                EditorGUI.DropShadowLabel(infoRect, $"Mip {m_PreviewMipLevel}");
             }
 
             // Display the actual preview
