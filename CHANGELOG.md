@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [1.4.0] - 2022-??-?? (not released yet)
 ### Fixed
  - Fixed that when ```new Texture3D``` causes an exception in the importer, that the Texture3D asset is left in a broken state. Now it will create a magenta Texture3D instead and log an error to the console.
- 
+ - Perform source texture dependency registration as very first step during the import, to fix that Unity triggers a reimport of the Texture3D asset when changing a dependency, on an earlier failed Texture3D import.
 
 ## [1.3.0] - 2022-03-11
 After installing this update, it will trigger a reimport of all Texture3DAtlas assets in the project and Texture3DAtlas's will no longer be readable via scripts by default.
