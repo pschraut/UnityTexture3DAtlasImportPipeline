@@ -141,8 +141,7 @@ namespace Oddworm.EditorFramework
             var width = 8;
             var height = 8;
             var mipmapEnabled = true;
-            var textureFormat = TextureFormat.ARGB32;
-            //var srgbTexture = true;
+            var textureFormat = TextureFormat.RGBA32;
 
             // Check if the input textures are valid to be used to build the texture array.
             var isValid = Verify(ctx, false);
@@ -158,13 +157,26 @@ namespace Oddworm.EditorFramework
                 var sourceTexturePath = AssetDatabase.GetAssetPath(sourceTexture);
                 var textureImporter = (TextureImporter)AssetImporter.GetAtPath(sourceTexturePath);
                 mipmapEnabled = textureImporter.mipmapEnabled;
-                //srgbTexture = textureImporter.sRGBTexture;
             }
 
-            // Create the texture array.
-            // When the texture array asset is being created, there are no input textures added yet,
-            // thus we do Max(1, Count) to make sure to add at least 1 slice.
-            var texture3D = new Texture3D(width, height, Mathf.Max(1, m_Textures.Count), textureFormat, mipmapEnabled);//, !srgbTexture);
+            Texture3D texture3D;
+            try
+            {
+                // Create the texture array.
+                // When the texture array asset is being created, there are no input textures added yet,
+                // thus we do Max(1, Count) to make sure to add at least 1 slice.
+                texture3D = new Texture3D(width, height, Mathf.Max(1, m_Textures.Count), textureFormat, mipmapEnabled);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogException(e);
+                ctx.LogImportError($"Import failed '{ctx.assetPath}'.", ctx.mainObject);
+
+                isValid = false;
+                textureFormat = TextureFormat.RGBA32;
+                texture3D = new Texture3D(width, height, Mathf.Max(1, m_Textures.Count), textureFormat, mipmapEnabled);
+            }
+
             texture3D.wrapMode = m_WrapMode;
             texture3D.filterMode = m_FilterMode;
             texture3D.anisoLevel = m_AnisoLevel;

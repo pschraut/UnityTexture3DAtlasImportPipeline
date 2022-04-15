@@ -4,6 +4,11 @@ All notable changes to this package are documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2022-??-?? (not released yet)
+### Fixed
+ - Fixed that when ```new Texture3D``` causes an exception in the importer, that the Texture3D asset is left in a broken state. Now it will create a magenta Texture3D instead and log an error to the console.
+ 
+
 ## [1.3.0] - 2022-03-11
 After installing this update, it will trigger a reimport of all Texture3DAtlas assets in the project and Texture3DAtlas's will no longer be readable via scripts by default.
 ### Added
