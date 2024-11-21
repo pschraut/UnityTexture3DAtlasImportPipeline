@@ -1,5 +1,5 @@
 ﻿//
-// Texture3D Importer for Unity. Copyright (c) 2019-2021 Peter Schraut (www.console-dev.de). See LICENSE.md
+// Texture3D Importer for Unity. Copyright (c) 2019-2024 Peter Schraut (www.console-dev.de). See LICENSE.md
 // https://github.com/pschraut/UnityTexture3DAtlasImportPipeline
 //
 using System.Collections.Generic;
