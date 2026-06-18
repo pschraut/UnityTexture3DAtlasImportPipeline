@@ -1,5 +1,5 @@
 ﻿//
-// Texture3D Importer for Unity. Copyright (c) 2019-2024 Peter Schraut (www.console-dev.de). See LICENSE.md
+// Texture3D Importer for Unity. Copyright (c) 2019-2026 Peter Schraut (www.console-dev.de). See LICENSE.md
 // https://github.com/pschraut/UnityTexture3DAtlasImportPipeline
 //
 
@@ -443,7 +443,13 @@ namespace Oddworm.EditorFramework
 
             var fileName = $"New Texture3D Atlas.{kFileExtension}";
             directoryPath = AssetDatabase.GenerateUniqueAssetPath(directoryPath + fileName);
-            ProjectWindowUtil.CreateAssetWithContent(directoryPath, "This file represents a Texture3D asset for Unity.\nYou need the 'Texture3D Atlas Import Pipeline' package available at https://github.com/pschraut/UnityTexture3DAtlasImportPipeline to properly import this file in Unity.");
+
+            const string kTextContent = "This file represents a Texture3D asset for Unity.\nYou need the 'Texture3D Atlas Import Pipeline' package available at https://github.com/pschraut/UnityTexture3DAtlasImportPipeline to properly import this file in Unity.";
+#if UNITY_6000_4_OR_NEWER
+            ProjectWindowUtil.CreateAssetWithTextContent(directoryPath, kTextContent);
+#else
+            ProjectWindowUtil.CreateAssetWithContent(directoryPath, kTextContent);
+#endif
         }
     }
 }
